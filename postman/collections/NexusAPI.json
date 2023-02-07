@@ -1,0 +1,336 @@
+{
+	"info": {
+		"_postman_id": "a57c5f67-ac34-4be0-8940-72e9ee380054",
+		"name": "NexusAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_uid": "25489875-a57c5f67-ac34-4be0-8940-72e9ee380054"
+	},
+	"item": [
+		{
+			"name": "AffiliateAccount",
+			"item": [
+				{
+					"name": "AffiliateAccountCreate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1a2a2014-5c8f-4f16-8e72-c02cb778adbb",
+								"exec": [
+									"pm.test(\"Successful POST request\", () => {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if ID is greater then 0\", () => {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.environment.set(\"affiliateAccountId\", jsonData.data.id);\r",
+									"    pm.environment.set(\"affiliateName\", jsonData.data.name);\r",
+									"    pm.expect(jsonData.data.id).to.be.greaterThan(0);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "db3d931e-2e2c-4bba-a77c-37271d5c39e9",
+								"exec": [
+									"pm.variables.set(\"name\", '{{$randomCompanyName}}');"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "eb8b2607-d0fb-4200-81a1-5b80c01a7fe7",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account?partner_id=1&affiliate_platform_id=1&name={{name}}",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account"
+							],
+							"query": [
+								{
+									"key": "partner_id",
+									"value": "1"
+								},
+								{
+									"key": "affiliate_platform_id",
+									"value": "1"
+								},
+								{
+									"key": "name",
+									"value": "{{name}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AffiliateAccountView",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1fc9faa5-829e-4cf0-b273-4e9ba7ddbf18",
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check Affiliate Name is correct\", () => {\r",
+									"    pm.expect(jsonData.data.name).to.include(pm.environment.get(\"affiliateName\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "858d8d34-5873-4f6e-bb11-42bff021a06b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account/{{affiliateAccountId}}",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account",
+								"{{affiliateAccountId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AffiliateAccountIndex",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"id": "061ea0a2-4521-445e-bb95-7fcde328c522"
+							}
+						}
+					],
+					"id": "8255fc26-3c83-4c1d-902b-d5adfde8d182",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AffiliateAccountUpdate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ca0cb4dc-afdf-4d2c-bbe0-b083dd3d077b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "90efb88f-495d-45d4-9daa-47fd54b95682",
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if ID id correct\", () => {\r",
+									"    pm.expect(jsonData.data.id).to.eq(pm.environment.get(\"affiliateAccountId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if name is being updated\", () => {\r",
+									"    pm.expect(jsonData.data.name).to.eq('New affiliate account name');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "4d25b0d8-ecca-4a70-be8b-ac862d3ebb0a",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account/{{affiliateAccountId}}/?name=New affiliate account name",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account",
+								"{{affiliateAccountId}}",
+								""
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "New affiliate account name"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AffiliateAccountDelete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "a420df6b-420a-40b7-87dd-e37df5ac7d34",
+								"exec": [
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if response message is true\", () => {\r",
+									"    pm.expect(pm.response.text()).to.include(\"true\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "bbeec2a5-6198-4f3a-94e4-09d6c9598673",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "dae08334-acbc-4b9f-8c51-b70a54f4147c",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account/{{affiliateAccountId}}",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account",
+								"{{affiliateAccountId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"id": "975c067f-2701-4160-955b-04c6cd6875a0",
+			"description": "An account which represents a Partner Group within one or more markets, containing the credentials (username and password) for accessing the Affiliate Platform."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "17b76c1a-0ab0-441b-9ddd-a2dd96b2919a"
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				],
+				"id": "684fc094-eaa5-422e-9a62-ab46c2bbb997"
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f474bc66-8d8c-4e08-8136-f664bb9a2579",
+			"key": "API_URL",
+			"value": "https://nexus.dev.kafe.rocks/api",
+			"type": "default"
+		}
+	]
+}
