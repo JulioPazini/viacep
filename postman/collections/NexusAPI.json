@@ -10,120 +10,36 @@
 			"name": "AffiliateAccount",
 			"item": [
 				{
-					"name": "AffiliateAccountIndex",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"id": "061ea0a2-4521-445e-bb95-7fcde328c522"
-							}
-						}
-					],
-					"id": "8255fc26-3c83-4c1d-902b-d5adfde8d182",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliateAccountView",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"\r",
-									""
-								],
-								"type": "text/javascript",
-								"id": "1fc9faa5-829e-4cf0-b273-4e9ba7ddbf18"
-							}
-						}
-					],
-					"id": "858d8d34-5873-4f6e-bb11-42bff021a06b",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account/{{affiliate_account_id}}",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account",
-								"{{affiliate_account_id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "AffiliateAccountCreate",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
+								"id": "1a2a2014-5c8f-4f16-8e72-c02cb778adbb",
 								"exec": [
-									"pm.test(\"Successful POST request\", function () {\r",
+									"pm.test(\"Successful POST request\", () => {\r",
 									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
 									"});\r",
 									"\r",
 									"pm.test(\"Check if ID is greater then 0\", () => {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.environment.set(\"affiliate_account_id\", jsonData.data.id);\r",
+									"    pm.environment.set(\"affiliateAccountId\", jsonData.data.id);\r",
+									"    pm.environment.set(\"affiliateName\", jsonData.data.name);\r",
 									"    pm.expect(jsonData.data.id).to.be.greaterThan(0);\r",
 									"});\r",
 									""
 								],
-								"type": "text/javascript",
-								"id": "1a2a2014-5c8f-4f16-8e72-c02cb778adbb"
+								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "db3d931e-2e2c-4bba-a77c-37271d5c39e9",
 								"exec": [
-									"pm.variables.set(\"name\",  '{{$randomCompanyName}}');"
+									"pm.variables.set(\"name\", '{{$randomCompanyName}}');"
 								],
-								"type": "text/javascript",
-								"id": "db3d931e-2e2c-4bba-a77c-37271d5c39e9"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -167,7 +83,131 @@
 					"response": []
 				},
 				{
+					"name": "AffiliateAccountView",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1fc9faa5-829e-4cf0-b273-4e9ba7ddbf18",
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check Affiliate Name is correct\", () => {\r",
+									"    pm.expect(jsonData.data.name).to.include(pm.environment.get(\"affiliateName\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"id": "858d8d34-5873-4f6e-bb11-42bff021a06b",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account/{{affiliateAccountId}}",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account",
+								"{{affiliateAccountId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "AffiliateAccountIndex",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"id": "061ea0a2-4521-445e-bb95-7fcde328c522"
+							}
+						}
+					],
+					"id": "8255fc26-3c83-4c1d-902b-d5adfde8d182",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{API_URL}}/affiliate-account",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"affiliate-account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "AffiliateAccountUpdate",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ca0cb4dc-afdf-4d2c-bbe0-b083dd3d077b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "90efb88f-495d-45d4-9daa-47fd54b95682",
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Status code is 200\", () => {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if ID id correct\", () => {\r",
+									"    pm.expect(jsonData.data.id).to.eq(pm.environment.get(\"affiliateAccountId\"));\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if name is being updated\", () => {\r",
+									"    pm.expect(jsonData.data.name).to.eq('New affiliate account name');\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"id": "4d25b0d8-ecca-4a70-be8b-ac862d3ebb0a",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -182,19 +222,19 @@
 							}
 						],
 						"url": {
-							"raw": "{{API_URL}}/affiliate-account/1/?name=Account_2",
+							"raw": "{{API_URL}}/affiliate-account/{{affiliateAccountId}}/?name=New affiliate account name",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"affiliate-account",
-								"1",
+								"{{affiliateAccountId}}",
 								""
 							],
 							"query": [
 								{
 									"key": "name",
-									"value": "Account_2"
+									"value": "New affiliate account name"
 								}
 							]
 						}
@@ -207,28 +247,28 @@
 						{
 							"listen": "test",
 							"script": {
+								"id": "a420df6b-420a-40b7-87dd-e37df5ac7d34",
 								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
+									"pm.test(\"Status code is 200\", () => {\r",
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"Check if response message is true\", function () {\r",
+									"pm.test(\"Check if response message is true\", () => {\r",
 									"    pm.expect(pm.response.text()).to.include(\"true\");\r",
 									"});\r",
 									""
 								],
-								"type": "text/javascript",
-								"id": "a420df6b-420a-40b7-87dd-e37df5ac7d34"
+								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "prerequest",
 							"script": {
+								"id": "bbeec2a5-6198-4f3a-94e4-09d6c9598673",
 								"exec": [
 									""
 								],
-								"type": "text/javascript",
-								"id": "bbeec2a5-6198-4f3a-94e4-09d6c9598673"
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -246,13 +286,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{API_URL}}/affiliate-account/{{affiliate_account_id}}",
+							"raw": "{{API_URL}}/affiliate-account/{{affiliateAccountId}}",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"affiliate-account",
-								"{{affiliate_account_id}}"
+								"{{affiliateAccountId}}"
 							]
 						}
 					},
@@ -261,1459 +301,6 @@
 			],
 			"id": "975c067f-2701-4160-955b-04c6cd6875a0",
 			"description": "An account which represents a Partner Group within one or more markets, containing the credentials (username and password) for accessing the Affiliate Platform."
-		},
-		{
-			"name": "AffiliateAccountDeal",
-			"item": [
-				{
-					"name": "AffiliateAccountDealIndex",
-					"id": "ef9ed4cc-1cf0-4322-af59-2527a3ca5b9c",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account-deal",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account-deal"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliateAccountDealView",
-					"id": "efca07cf-a96d-4a00-883f-e16c86d420a8",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account-deal/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account-deal",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliateAccountDealCreate",
-					"id": "39eb1414-d7e6-4c92-b511-2dd67170fcd8",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account-deal?brand_id=1&affiliate_account_id=1&name=Deal_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account-deal"
-							],
-							"query": [
-								{
-									"key": "brand_id",
-									"value": "1"
-								},
-								{
-									"key": "affiliate_account_id",
-									"value": "1"
-								},
-								{
-									"key": "name",
-									"value": "Deal_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliateAccountDealUpdate",
-					"id": "6956fc35-0519-4c70-beda-d57bbd9b25b2",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account-deal/1/?name=Deal_2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account-deal",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Deal_2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliateAccountDealDelete",
-					"id": "26ad9f6e-fe68-41f9-8dc0-a158a212ebd0",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-account-deal/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-account-deal",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "80c3dcdc-e865-473b-be0b-02afbd6a7342"
-		},
-		{
-			"name": "AffiliatePlatform",
-			"item": [
-				{
-					"name": "AffiliatePlatformIndex",
-					"id": "8aa08469-ff37-4a63-bd7a-7c9798002453",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-platform",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-platform"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliatePlatformView",
-					"id": "fb3329b8-4f2b-44ae-a8dd-086416bc7e75",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-platform/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-platform",
-								"1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliatePlatformCreate",
-					"id": "af3bb2f4-c229-46bf-a11f-41d638ad8bc8",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-platform?name=AffiliateAccount_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-platform"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "AffiliateAccount_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliatePlatformUpdate",
-					"id": "d54ac604-c136-4b48-a27c-07c3593fc969",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-platform/1/?name=AffiliatePlatform_2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-platform",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "AffiliatePlatform_2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "AffiliatePlatformDelete",
-					"id": "60fffd1f-49dc-4499-a5f4-b56722748102",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/affiliate-platform/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"affiliate-platform",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "076a5c00-b5c8-46bb-b8f5-7203a86829fc"
-		},
-		{
-			"name": "Brand",
-			"item": [
-				{
-					"name": "BrandIndex",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"id": "4cb1c01a-1264-4529-94c3-021a85be9194"
-							}
-						}
-					],
-					"id": "03c469f1-8717-4285-a8e1-28ee3d7b1e20",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/brand",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"brand"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "BrandView",
-					"id": "560a6295-06c0-45b0-af16-f6a2f4a18e8d",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/brand/3",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"brand",
-								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "BrandCreate",
-					"id": "1605357c-76d4-4970-bd19-d62e491c7bc8",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/brand?partner_id=1&name=Brand_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"brand"
-							],
-							"query": [
-								{
-									"key": "partner_id",
-									"value": "1"
-								},
-								{
-									"key": "name",
-									"value": "Brand_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "BrandUpdate",
-					"id": "eccf3398-6333-4844-999d-4c0ca6f94c39",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/brand/1/?name=Brand_2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"brand",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Brand_2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "BrandDelete",
-					"id": "43a75b92-bd61-4d5f-aac7-e39eaac4b69d",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/brand/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"brand",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "f64ef840-0f52-4ec9-9bb7-822fe07902fd"
-		},
-		{
-			"name": "Click",
-			"item": [
-				{
-					"name": "ClickIndex",
-					"id": "aa6956ed-b2a9-423f-864b-5a9dc01ee0f1",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/click",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"click"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ClickView",
-					"id": "ff04a7d9-f046-4f3a-a109-053871f1688e",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/click/2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"click",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ClickCreate",
-					"id": "e787dfef-2914-4028-a527-327d6dbdd6c4",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/click?tracker_id=1&user_agent=Apple iSpud v1.2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"click"
-							],
-							"query": [
-								{
-									"key": "tracker_id",
-									"value": "1"
-								},
-								{
-									"key": "user_agent",
-									"value": "Apple iSpud v1.2"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "b06be66d-dca7-4443-b49e-eeb48dbafbab"
-		},
-		{
-			"name": "Site",
-			"item": [
-				{
-					"name": "SiteIndex",
-					"id": "f8dedb9b-241b-4c40-9e92-818d217a646e",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/site",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"site"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "SiteView",
-					"id": "717bca20-a482-463b-b7a4-6d8812cad053",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/site/4",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"site",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "SiteCreate",
-					"id": "8382b783-d660-4678-90f0-e14fed9873c7",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/site?name=Site_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"site"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Site_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "SiteUpdate",
-					"id": "10ddeb18-bc6b-4bba-9daa-7e326b076135",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/site/1/?name=Site_123",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"site",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Site_123"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "SiteDelete",
-					"id": "57612cfa-9e8f-44c7-b744-5ef8172b22fe",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/site/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"site",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "f6e441e8-891c-47af-b3be-d90a75b9e14d"
-		},
-		{
-			"name": "Partner",
-			"item": [
-				{
-					"name": "PartnerIndex",
-					"id": "7438a92a-ef11-4163-abd2-3876ecc834f9",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerView",
-					"id": "10ccd88f-94f8-4ebf-86b8-419a31f35721",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner/4",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerCreate",
-					"id": "d6c83501-7b9f-4845-b130-7245c07723c1",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner?name=Partner_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Partner_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerUpdate",
-					"id": "64571850-90d6-4652-bc0a-9d300bd6a85e",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner/1/?name=Partner_123",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Partner_123"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerDelete",
-					"id": "28224d06-b2f5-4388-aded-e6a4be2751dc",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "15444d90-3c1b-4099-900d-403bbb9dc8f0"
-		},
-		{
-			"name": "PartnerGroup",
-			"item": [
-				{
-					"name": "PartnerGroupIndex",
-					"id": "5ba83d3f-c08b-44a8-bd38-62609224bd94",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner-group",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner-group"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerGroupView",
-					"id": "f7bee205-80b5-4536-83b0-b91b14fc5ad3",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner-group/4",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner-group",
-								"4"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerGroupCreate",
-					"id": "7241acb7-f252-4617-901a-7d2b7310cb09",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner-group?name=Partner_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner-group"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Partner_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerGroupUpdate",
-					"id": "8f5e2afb-9050-4d5b-ac8f-a2490923dcae",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner-group/1/?name=Partner_123",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner-group",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Partner_123"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PartnerGroupDelete",
-					"id": "b498d1e5-cc8a-4e7c-908c-542eadd66f0e",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/partner-group/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"partner-group",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "75b89f1c-bd88-4d65-b12d-8af8760711b1"
-		},
-		{
-			"name": "Peer",
-			"item": [
-				{
-					"name": "Subscription",
-					"item": [
-						{
-							"name": "PeerSubscriptionIndex",
-							"id": "09e06718-4381-45d9-9559-632f4b0bab07",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{API_URL}}/peer/2/subscription",
-									"host": [
-										"{{API_URL}}"
-									],
-									"path": [
-										"peer",
-										"2",
-										"subscription"
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "PeerSubscriptionView",
-							"id": "bb505f9f-0cc3-48b2-997b-40b13f2a6eb9",
-							"protocolProfileBehavior": {
-								"disableBodyPruning": true
-							},
-							"request": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "Accept",
-										"value": "application/json",
-										"type": "default"
-									}
-								],
-								"url": {
-									"raw": "{{API_URL}}/peer/2/subscription/51",
-									"host": [
-										"{{API_URL}}"
-									],
-									"path": [
-										"peer",
-										"2",
-										"subscription",
-										"51"
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"id": "c530ecf8-2f38-4bd0-9313-ba65927fd12a"
-				},
-				{
-					"name": "PeerIndex",
-					"id": "cc89f518-d7f3-43e8-9539-e4e6a86280e4",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/peer",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"peer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PeerView",
-					"id": "5215b9d5-0f0b-4183-bb32-87cc43cff2d0",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/peer/2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"peer",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PeerCreate",
-					"id": "da89f184-dd5e-440c-9837-cb98a000c0e9",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/peer?name=Peer_1&slug=peer1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"peer"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Peer_1"
-								},
-								{
-									"key": "slug",
-									"value": "peer1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PeerUpdate",
-					"id": "131e02e9-a75c-494d-b9bd-c0bb5084a317",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/peer/1/?name=Peer_2&slug=peer2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"peer",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Peer_2"
-								},
-								{
-									"key": "slug",
-									"value": "peer2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "PeerDelete",
-					"id": "42661767-21fb-4580-82d7-7ecd2fdd0a39",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/peer/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"peer",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "de5134cc-d94e-42b6-b86f-6ba580c69c3a"
-		},
-		{
-			"name": "Tracker",
-			"item": [
-				{
-					"name": "TrackerIndex",
-					"id": "8cbdf0ec-9d1f-4b95-bba1-8d3a14b1a5ee",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/tracker",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"tracker"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "TrackerView",
-					"id": "a2476025-3b35-4d5b-a9fe-95a7262a5665",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/tracker/3",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"tracker",
-								"3"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "TrackerCreate",
-					"id": "640e6e99-cdd6-45ed-aad0-1bc0a61063d1",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/tracker?name=Tracker_1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"tracker"
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Tracker_1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "TrackerUpdate",
-					"id": "de2d7738-44cb-4b85-bb98-9dba7af8a485",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/tracker/1/?name=Tracker_2",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"tracker",
-								"1",
-								""
-							],
-							"query": [
-								{
-									"key": "name",
-									"value": "Tracker_2"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "TrackerDelete",
-					"id": "dc23fc4d-86e2-43f0-a963-8f2ce77c5831",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "default"
-							}
-						],
-						"url": {
-							"raw": "{{API_URL}}/tracker/1",
-							"host": [
-								"{{API_URL}}"
-							],
-							"path": [
-								"tracker",
-								"1"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"id": "1b404180-c737-47f1-a7bd-4f352a91b9f8"
 		}
 	],
 	"event": [

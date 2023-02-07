@@ -13,3 +13,4 @@ files[] = {"id":"25489875-a57c5f67-ac34-4be0-8940-72e9ee380054","path":"NexusAPI
 rootDirectory = postman/schemas
 
 [relations.apiDefinition.metaData]
+type = openapi:3
